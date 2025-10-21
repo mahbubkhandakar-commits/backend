@@ -18,13 +18,17 @@ const config_1 = __importDefault(require("./app/config"));
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
+            // Connect to database first
             yield mongoose_1.default.connect(config_1.default.database_url);
+            console.log('Database connection established successfully');
+            // Start server after successful database connection
             app_1.default.listen(config_1.default.port, () => {
                 console.log(`KMG Task Server Listening on port ${config_1.default.port}`);
             });
         }
         catch (error) {
-            console.log(error);
+            console.error('Server initialization failed:', error);
+            process.exit(1);
         }
     });
 }

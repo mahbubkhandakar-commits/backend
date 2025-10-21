@@ -8,18 +8,19 @@ const cors_1 = __importDefault(require("cors"));
 const globalErrorHandler_1 = __importDefault(require("./app/middlewares/globalErrorHandler"));
 const routes_1 = __importDefault(require("./app/routes"));
 const app = (0, express_1.default)();
-// Use CORS with proper configuration
-app.use((0, cors_1.default)({
-    origin: 'https://task-manager-client-dusky.vercel.app', // ✅ your frontend URL
-    credentials: true, // ✅ allow cookies, headers, etc.
-}));
+const corsOptions = {
+    origin: process.env.CLIENT_URL || 'https://task-manager-client-dusky.vercel.app',
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    exposedHeaders: ['Content-Length', 'X-Content-Range'],
+    optionsSuccessStatus: 200
+};
+app.use((0, cors_1.default)(corsOptions));
 app.use(express_1.default.json());
-// Application routes
 app.use('/api', routes_1.default);
 app.get('/', (req, res) => {
     res.send('Kazi Marketing Task Portal!');
 });
 app.use(globalErrorHandler_1.default);
-// app.use(notFound);
-// Export both app and server
 exports.default = app;
